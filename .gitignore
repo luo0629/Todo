@@ -1,0 +1,138 @@
+# ===================================
+# Python / Backend
+# ===================================
+
+# Python 虚拟环境
+backend/.venv/
+backend/venv/
+backend/env/
+backend/ENV/
+
+# Python 编译文件
+backend/**/__pycache__/
+backend/**/*.py[cod]
+backend/**/*$py.class
+*.pyc
+*.pyo
+
+# 数据库文件
+backend/**/*.db
+backend/**/*.sqlite
+backend/**/*.sqlite3
+database.db
+
+# Python 包管理
+backend/**/*.egg-info/
+backend/**/dist/
+backend/**/build/
+backend/**/.eggs/
+
+# IDE 配置
+backend/**/.vscode/
+backend/**/.idea/
+
+# 环境变量文件
+backend/**/.env
+backend/**/.env.local
+
+# uv 锁文件（可选，根据团队决定）
+# backend/uv.lock
+
+# ===================================
+# Node.js / Frontend
+# ===================================
+
+# 依赖目录
+fronted/my-app/node_modules/
+node_modules/
+
+# 构建输出
+fronted/my-app/dist/
+fronted/my-app/build/
+fronted/my-app/.next/
+fronted/my-app/out/
+
+# 日志文件
+fronted/my-app/npm-debug.log*
+fronted/my-app/yarn-debug.log*
+fronted/my-app/yarn-error.log*
+fronted/my-app/pnpm-debug.log*
+fronted/my-app/lerna-debug.log*
+
+# 环境变量文件
+fronted/my-app/.env
+fronted/my-app/.env.local
+fronted/my-app/.env.development.local
+fronted/my-app/.env.test.local
+fronted/my-app/.env.production.local
+
+# IDE 配置
+fronted/my-app/.vscode/
+fronted/my-app/.idea/
+
+# 测试覆盖率
+fronted/my-app/coverage/
+fronted/my-app/.nyc_output/
+
+# Vite 缓存
+fronted/my-app/.vite/
+
+# ===================================
+# 操作系统
+# ===================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ===================================
+# 编辑器 / IDE
+# ===================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ===================================
+# 其他
+# ===================================
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
