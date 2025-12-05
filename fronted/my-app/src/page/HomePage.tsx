@@ -7,8 +7,10 @@ import { useTodoStore } from "../store/todoStore";
 const HomePage: React.FC = () => {
     const { events, selectedTag, setSelectedTag, fetchEvents } = useTodoStore();
 
+
     useEffect(() => {
         fetchEvents(selectedTag);
+
     }, []);
 
     return (

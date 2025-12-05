@@ -1,48 +1,86 @@
-from fastapi import APIRouter,Depends,HTTPException,Request
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-import json
-from ..database.db_operation import (get_all_events,create_event)
-from ..schemas.event import EventCreat
+from ..database.db_operation import get_all_events_by_tag, create_event, update_event_by_id,get_event_by_id
+from ..schemas.event import EventCreate, EventResponse
 from ..database.db import get_db
-from datetime import datetime,timedelta,date
+from datetime import datetime, timedelta, date
+from typing import Dict, List
 
+todo_router = APIRouter()
 
-todo_router=APIRouter()
+#获取全部任务
 
 @todo_router.get('/getAll')
-def get_all_todo(tag:str,request:Request,db:Session=Depends(get_db)):
-    events=get_all_events(db,tag)
-    today_events=[]
-    tomorrow_events=[]
-    other_events=[]
-    today=date.today()
+def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> Dict[str, List[EventResponse]]:
+    """
+    获取所有任务并按日期分类
+    FastAPI 会自动将 EventResponse 模型转换为 JSON
+    """
+    # 从数据库获取 ORM 对象
+    events = get_all_events_by_tag(db, tag)
     
-    for e in events:
-        # e 是字典，end_time 是 ISO 格式字符串
-        end_time_str = e.get("end_time")
-        if end_time_str:
-            end_date = datetime.fromisoformat(end_time_str).date()
-            if end_date==today:
-                today_events.append(e)
-            elif end_date==today+timedelta(days=1):
-                tomorrow_events.append(e)
+    today_events = []
+    tomorrow_events = []
+    other_events = []
+    today = date.today()
+    
+    for event in events:
+        # 使用 Schema 将 ORM 对象转换为 Pydantic 模型
+        event_response = EventResponse.from_orm_model(event)
+        
+        # 根据截止日期分类
+        if event.end_time:
+            end_date = event.end_time.date()
+            if end_date == today:
+                today_events.append(event_response)
+            elif end_date == today + timedelta(days=1):
+                tomorrow_events.append(event_response)
             else:
-                other_events.append(e)
+                other_events.append(event_response)
         else:
-            other_events.append(e)
+            other_events.append(event_response)
 
+    # FastAPI 自动将 Pydantic 模型转换为 JSON
     return {
-        "today_events":today_events,
-        "tomorrow_events":tomorrow_events,
-        "other_events":other_events
+        "today_events": today_events,
+        "tomorrow_events": tomorrow_events,
+        "other_events": other_events
     }
 
-@todo_router.post('/create')
-def create_todo(data:EventCreat,db:Session=Depends(get_db)):
-    title=data.title
-    tag=data.tag
-    end_time=data.end_time
-    return create_event(db,title,tag,end_time)
+#新建任务
+@todo_router.post('/create', response_model=EventResponse)
+def create_todo(data: EventCreate, db: Session = Depends(get_db)):
+    """
+    创建新任务
+    使用 Schema 处理序列化
+    """
+    # 从数据库创建任务，返回 ORM 对象
+    event = create_event(db, data.title, data.tag, data.end_time)
+    
+    # 使用 Schema 转换为响应格式
+    return EventResponse.from_orm_model(event)
 
+@todo_router.put('/updateStateById/{id}', response_model=EventResponse)
+def update_todo_state(id: int, db: Session = Depends(get_db)):
+    """
+    切换任务完成状态
+    """
+    event = get_event_by_id(db, id)
+    if not event:
+        raise HTTPException(status_code=404, detail="任务不存在")
+    
+    # 切换完成状态
+    new_completed_state = not event.isCompleted
+    
+    # 调用更新函数，传递所有必需的参数
+    event = update_event_by_id(
+        db, 
+        id=event.id,
+        title=event.title,
+        tag=event.tag,
+        end_time=event.end_time,
+        isCompleted=new_completed_state
+    )
+    
+    return EventResponse.from_orm_model(event)
 

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import http from '../api/index';
+import { todoApi } from '../api/todoApi';
 import type { EventLists } from '../type/todo';
 
 /**
@@ -57,9 +57,8 @@ export const useTodoStore = create<TodoState>((set, get) => ({
     fetchEvents: async (tag: string) => {
         set({ loading: true });
         try {
-            // 调用 API 获取任务数据
-            const res = await http.get("/todo/getAll", { tag }) as unknown;
-            const data = res as EventLists;
+            // 调用封装的 API 获取任务数据
+            const data = await todoApi.getAllEvents(tag);
             
             // 验证数据结构并更新状态
             if (data && data.today_events && data.tomorrow_events && data.other_events) {

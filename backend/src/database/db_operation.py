@@ -1,27 +1,27 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
 from ..models.event import Todo_Event
+from typing import List
 
-#获取全部任务
-def event_to_dict(e: Todo_Event):
-    return {
-        "id": e.id,
-        "title": e.title,
-        "tag": e.tag,
-        "created_time": e.created_time.isoformat() if e.created_time else None,
-        "end_time": e.end_time.isoformat() if e.end_time else None,
-        "isCompleted": bool(e.isCompleted),
-    }
-
-def get_all_events(db: Session,tag:str):
-    if tag=='all':
-        events=db.query(Todo_Event).all()
+def get_all_events_by_tag(db: Session, tag: str) -> List[Todo_Event]:
+    """
+    获取所有任务（按标签过滤）
+    返回 ORM 对象列表，序列化由 Schema 层处理
+    """
+    if tag == 'all':
+        events = db.query(Todo_Event).all()
     else:
-        events = db.query(Todo_Event).filter(Todo_Event.tag==tag).all()
-    return [event_to_dict(e) for e in events]
+        events = db.query(Todo_Event).filter(
+            Todo_Event.tag == tag, 
+            Todo_Event.isCompleted == False
+        ).all()
+    return events
 
-#新建任务
-def create_event(db: Session, title: str, tag: str, end_time: datetime):
+def create_event(db: Session, title: str, tag: str, end_time: datetime) -> Todo_Event:
+    """
+    创建新任务
+    返回 ORM 对象，序列化由 Schema 层处理
+    """
     if isinstance(end_time, str):
         try:
             end_time = datetime.fromisoformat(end_time)
@@ -31,4 +31,46 @@ def create_event(db: Session, title: str, tag: str, end_time: datetime):
     db.add(event)
     db.commit()
     db.refresh(event)
-    return event_to_dict(event)
+    return event
+
+def get_event_by_id(db:Session,id:int):
+    return db.query(Todo_Event).filter(Todo_Event.id==id).first()
+
+
+def update_event_by_id(db: Session, id:int, title: str, tag: str, 
+                       end_time: datetime , isCompleted: bool ) -> Todo_Event:
+    """
+    根据 ID 更新任务
+    """
+    event = db.get(Todo_Event, id)
+    if not event:
+        return None
+    
+    event.title = title
+    event.tag = tag
+    if isinstance(end_time, str):
+        try:
+            end_time = datetime.fromisoformat(end_time)
+        except Exception:
+            pass
+    event.end_time = end_time
+    event.isCompleted = isCompleted
+    
+    db.commit()
+    db.refresh(event)
+    return event
+
+
+
+def delete_event_by_id(db: Session, id: int) -> bool:
+    """
+    根据 ID 删除任务
+    返回是否删除成功
+    """
+    event = db.get(Todo_Event, id)
+    if not event:
+        return False
+    
+    db.delete(event)
+    db.commit()
+    return True

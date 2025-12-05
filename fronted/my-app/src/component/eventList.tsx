@@ -1,8 +1,11 @@
 import type { Event } from '../type/todo';
 import React ,{useState,useEffect}from 'react';
+import { todoApi } from '../api/todoApi';
+import { useTodoStore } from '../store/todoStore';
 
 const EventList:React.FC<{ data: Event[]; label: string }> = ({ data, label }) => {
     const [events, setEvents] = useState(data);
+    const refreshEvents=useTodoStore(state=>state.refreshEvents);
     useEffect(()=>{
         setEvents(data);
     },[data])
@@ -15,10 +18,14 @@ const EventList:React.FC<{ data: Event[]; label: string }> = ({ data, label }) =
         return { bg: '#F1F3F5', fg: '#666' };
     };
 
-    const toggleComplete = (id: number) => {
-        setEvents(prevEvents => prevEvents.map(event => 
-            String(event.id) === String(id) ? { ...event, isCompleted: !event.isCompleted } : event
-        ));
+    //更新任务状态
+    const toggleComplete = async(id: number) => {
+        try{
+            await todoApi.updateStateById(id);
+            await refreshEvents();
+        }catch(err){
+            console.log(err);
+        }
     };
 
     return (
@@ -50,9 +57,8 @@ const EventList:React.FC<{ data: Event[]; label: string }> = ({ data, label }) =
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {events.map((event) => (
-                    <div>
+                    <div key={event.id}>
                         <div
-                            key={event.id}
                             onClick={() => toggleComplete(event.id)}
                             style={{
                                 display: 'flex',

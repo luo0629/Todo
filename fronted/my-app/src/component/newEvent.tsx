@@ -1,7 +1,7 @@
 import React from "react"
 import { Form, Input, Select, DatePicker, Button, message } from "antd";
 import type { EventForm } from "../type/todo";
-import http from "../api/index";
+import { todoApi } from "../api/todoApi";
 import { useTodoStore } from "../store/todoStore";
 
 const NewEvent: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => {
@@ -16,7 +16,7 @@ const NewEvent: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => {
         };
         console.log(payload);
         try {
-            await http.post('/todo/create', payload);
+            await todoApi.createEvent(payload);
             message.success('任务创建成功！');
             form.resetFields();
             await refreshEvents(); // 刷新任务列表
