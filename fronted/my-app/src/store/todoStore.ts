@@ -31,6 +31,7 @@ interface TodoState {
 export const useTodoStore = create<TodoState>((set, get) => ({
     // 初始状态：空的任务列表
     events: {
+        old_events:[],
         today_events: [],
         tomorrow_events: [],
         other_events: []
@@ -61,7 +62,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
             const data = await todoApi.getAllEvents(tag);
             
             // 验证数据结构并更新状态
-            if (data && data.today_events && data.tomorrow_events && data.other_events) {
+            if (data &&data.old_events&& data.today_events && data.tomorrow_events && data.other_events) {
                 set({ events: data });
                 console.log('获取到的数据:', data);
             }

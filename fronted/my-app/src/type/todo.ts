@@ -15,6 +15,7 @@ export interface EventForm{
 }
 
 export interface EventLists{
+    old_events:Event[],
     today_events:Event[],
     tomorrow_events:Event[],
     other_events:Event[],

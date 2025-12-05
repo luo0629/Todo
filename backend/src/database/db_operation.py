@@ -12,8 +12,7 @@ def get_all_events_by_tag(db: Session, tag: str) -> List[Todo_Event]:
         events = db.query(Todo_Event).all()
     else:
         events = db.query(Todo_Event).filter(
-            Todo_Event.tag == tag, 
-            Todo_Event.isCompleted == False
+            Todo_Event.tag == tag
         ).all()
     return events
 

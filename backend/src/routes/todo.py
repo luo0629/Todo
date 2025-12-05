@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from ..database.db_operation import get_all_events_by_tag, create_event, update_event_by_id,get_event_by_id
+from ..database.db_operation import get_all_events_by_tag, create_event, update_event_by_id,get_event_by_id,delete_event_by_id
 from ..schemas.event import EventCreate, EventResponse
 from ..database.db import get_db
 from datetime import datetime, timedelta, date
@@ -22,6 +22,7 @@ def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> D
     today_events = []
     tomorrow_events = []
     other_events = []
+    old_events=[]
     today = date.today()
     
     for event in events:
@@ -35,13 +36,14 @@ def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> D
                 today_events.append(event_response)
             elif end_date == today + timedelta(days=1):
                 tomorrow_events.append(event_response)
+            elif event.end_time<datetime.now():
+                old_events.append(event_response)
             else:
                 other_events.append(event_response)
-        else:
-            other_events.append(event_response)
 
     # FastAPI 自动将 Pydantic 模型转换为 JSON
     return {
+        "old_events":old_events,
         "today_events": today_events,
         "tomorrow_events": tomorrow_events,
         "other_events": other_events
@@ -83,4 +85,14 @@ def update_todo_state(id: int, db: Session = Depends(get_db)):
     )
     
     return EventResponse.from_orm_model(event)
+
+@todo_router.delete('/delete/{id}')
+def delete_event(id: int, db: Session = Depends(get_db)):
+    """
+    删除任务
+    """
+    success = delete_event_by_id(db, id)
+    if not success:
+        raise HTTPException(status_code=404, detail="任务不存在")
+    return {"message": "删除成功", "id": id}
 
