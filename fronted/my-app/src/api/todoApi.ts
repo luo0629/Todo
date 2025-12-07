@@ -31,8 +31,8 @@ export const todoApi = {
      * @param payload - 更新的任务数据
      * @returns 返回更新后的任务
      */
-    async updateEvent(id: number, payload: Partial<EventForm>): Promise<any> {
-        return await http.put(`/todo/update/${id}`, payload);
+    async TagEvent(): Promise<any> {
+        return await http.get('/todo/tagEvents/');
     },
 
     /**

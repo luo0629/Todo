@@ -1,13 +1,15 @@
 import { create } from 'zustand';
 import { todoApi } from '../api/todoApi';
-import type { EventLists } from '../type/todo';
+import type { EventLists,TagEvents } from '../type/todo';
 
 /**
  * Todo 状态管理接口
  */
 interface TodoState {
-    /** 任务列表数据 */
+    /** 任务列表数据(根据时间) */
     events: EventLists;
+    /** 任务分类数据(根据tag) */
+    tagevents:TagEvents;
     /** 当前选中的标签 */
     selectedTag: string;
     /** 加载状态 */
@@ -36,6 +38,11 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         tomorrow_events: [],
         other_events: []
     },
+    tagevents:{
+        study:[],
+        work:[],
+        life:[]
+    },
     // 默认选中"全部"标签
     selectedTag: 'all',
     // 初始加载状态为 false
@@ -60,12 +67,16 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         try {
             // 调用封装的 API 获取任务数据
             const data = await todoApi.getAllEvents(tag);
+            const tagData=await todoApi.TagEvent();
             
             // 验证数据结构并更新状态
-            if (data &&data.old_events&& data.today_events && data.tomorrow_events && data.other_events) {
+            if (data) {
                 set({ events: data });
                 console.log('获取到的数据:', data);
             }
+            //更新状态
+            set({tagevents:tagData});
+            console.log('获取到的数据111',tagData)
         } catch (error) {
             console.error('获取数据失败:', error);
         } finally {

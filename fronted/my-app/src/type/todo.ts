@@ -20,3 +20,17 @@ export interface EventLists{
     tomorrow_events:Event[],
     other_events:Event[],
 }
+
+export interface TagEvents{
+    study:Event[],
+    work:Event[],
+    life:Event[]
+}
+
+export interface TaskClassifyProps {
+    data: Event[];
+    label: string;
+    icon: React.ReactNode;
+    iconBgColor: string;
+    progressColor: string;
+}

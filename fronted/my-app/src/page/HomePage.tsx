@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
         <div>
             <PageHead title="我的任务" />
             <TagList selectedTag={selectedTag} handleTagClick={setSelectedTag} />
-            {events && (events.other_events?.length + events.today_events?.length + events.tomorrow_events?.length) > 0 && <EventPage Events={events} />}
+            {events && (events.old_events?.length + events.other_events?.length + events.today_events?.length + events.tomorrow_events?.length) > 0 && <EventPage Events={events} />}
         </div>
     )
 }

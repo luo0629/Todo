@@ -9,7 +9,6 @@ from typing import Dict, List
 todo_router = APIRouter()
 
 #获取全部任务
-
 @todo_router.get('/getAll')
 def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> Dict[str, List[EventResponse]]:
     """
@@ -48,6 +47,19 @@ def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> D
         "tomorrow_events": tomorrow_events,
         "other_events": other_events
     }
+
+#获取任务根据Tag分类
+@todo_router.get('/tagEvents')
+def getTagEvents(db:Session=Depends(get_db)):
+    tags=['study','life','work']
+    tag_events={}
+    for tag in tags:
+        events=get_all_events_by_tag(db,tag)
+        # 将 ORM 对象转换为 Pydantic 模型
+        tag_events[tag] = [EventResponse.from_orm_model(event) for event in events]
+    
+    return tag_events
+
 
 #新建任务
 @todo_router.post('/create', response_model=EventResponse)
