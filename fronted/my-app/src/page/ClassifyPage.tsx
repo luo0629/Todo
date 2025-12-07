@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PageHead from "../component/pageHead";
-import TaskClassify from "../component/classifyComponent";
+import TaskClassify from "../component/classifyPage/classifyComponent";
 import { useTodoStore } from "../store/todoStore";
 import {ReconciliationFilled, ReadFilled, HomeFilled} from "@ant-design/icons";
 

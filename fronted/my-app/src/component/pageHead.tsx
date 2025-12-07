@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { FloatButton, Modal } from 'antd';
-import NewEvent from "./newEvent";
+import NewEvent from "./homePage/newEvent";
 import { PlusOutlined } from '@ant-design/icons';
 
 const PageHead: React.FC<{ title: string }> = ({ title }) => {

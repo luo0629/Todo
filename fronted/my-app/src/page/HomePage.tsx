@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import EventPage from "../component/eventPage";
+import EventPage from "../component/homePage/eventPage";
 import PageHead from "../component/pageHead";
 import TagList from "../component/tagList";
 import { useTodoStore } from "../store/todoStore";

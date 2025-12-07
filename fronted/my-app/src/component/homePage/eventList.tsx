@@ -1,7 +1,7 @@
-import type { Event } from '../type/todo';
+import type { Event } from '../../type/todo';
 import React ,{useState,useEffect}from 'react';
-import { todoApi } from '../api/todoApi';
-import { useTodoStore } from '../store/todoStore';
+import { todoApi } from '../../api/todoApi';
+import { useTodoStore } from '../../store/todoStore';
 
 const EventList:React.FC<{ data: Event[]; label: string }> = ({ data, label }) => {
     const [events, setEvents] = useState(data);
@@ -48,7 +48,7 @@ const EventList:React.FC<{ data: Event[]; label: string }> = ({ data, label }) =
             backgroundColor: '#fff',
             borderRadius: '16px',
             padding: '20px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+            boxShadow: '0 8px 12px rgba(0,0,0,0.05)',
             margin: '16px',
             transition: 'all 0.3s ease'
         }}>

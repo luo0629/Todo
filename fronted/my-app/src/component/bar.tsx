@@ -64,7 +64,7 @@ const Bar: React.FC = () => {
             transform: "translateX(-50%)",
             maxWidth: "800px",
             zIndex: 1000,
-            boxShadow: "0 -2px 8px rgba(0,0,0,0.05)",
+            boxShadow: "0 8px 12px rgba(0,0,0,0.05)",
             paddingBottom: "safe-area-inset-bottom" // Support for iPhone X+
         }}>
             {menuItems.map((item) => {

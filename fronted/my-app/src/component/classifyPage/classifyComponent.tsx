@@ -1,5 +1,5 @@
 import React from "react";
-import type { TaskClassifyProps } from "../type/todo";
+import type { TaskClassifyProps } from "../../type/todo";
 
 
 /**
@@ -24,7 +24,7 @@ const TaskClassify:React.FC<TaskClassifyProps>=({data, label, icon, iconBgColor,
                 backgroundColor: '#fff',
                 borderRadius: '16px',
                 padding: '20px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                boxShadow: '0 8px 12px rgba(0,0,0,0.05)',
                 margin: '16px',
                 transition: 'all 0.3s ease'
         }}>

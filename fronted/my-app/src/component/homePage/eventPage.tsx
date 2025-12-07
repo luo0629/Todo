@@ -1,6 +1,6 @@
 import React from "react"
 import EventList from "./eventList";
-import type { EventLists } from "../type/todo";
+import type { EventLists } from "../../type/todo";
 
 const EventPage:React.FC<{Events:EventLists}>=({Events})=>{
 
