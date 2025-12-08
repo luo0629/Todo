@@ -19,7 +19,6 @@ def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> D
     events = get_all_events_by_tag(db, tag)
     
     today_events = []
-    tomorrow_events = []
     other_events = []
     old_events=[]
     today = date.today()
@@ -33,8 +32,6 @@ def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> D
             end_date = event.end_time.date()
             if end_date == today:
                 today_events.append(event_response)
-            elif end_date == today + timedelta(days=1):
-                tomorrow_events.append(event_response)
             elif event.end_time<datetime.now():
                 old_events.append(event_response)
             else:
@@ -44,7 +41,6 @@ def get_all_todo(tag: str, request: Request, db: Session = Depends(get_db)) -> D
     return {
         "old_events":old_events,
         "today_events": today_events,
-        "tomorrow_events": tomorrow_events,
         "other_events": other_events
     }
 

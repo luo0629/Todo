@@ -17,7 +17,6 @@ export interface EventForm{
 export interface EventLists{
     old_events:Event[],
     today_events:Event[],
-    tomorrow_events:Event[],
     other_events:Event[],
 }
 
@@ -32,5 +31,11 @@ export interface TaskClassifyProps {
     label: string;
     icon: React.ReactNode;
     iconBgColor: string;
+    progressColor: string;
+}
+
+export interface TaskDescriptionProps {
+    data: Event[];
+    label: string;
     progressColor: string;
 }

@@ -3,6 +3,8 @@ import PageHead from "../component/pageHead";
 import OverView from "../component/countPage/overview";
 import TaskTrend from "../component/countPage/taskTrend";
 import { useTodoStore } from "../store/todoStore";
+import TaskCount from "../component/countPage/taskCount";
+
 
 const CountPage:React.FC=()=>{
     const {tagevents,fetchEvents}=useTodoStore();
@@ -14,6 +16,7 @@ const CountPage:React.FC=()=>{
             <PageHead title="任务统计"/>
             <OverView data={tagevents}/>
             <TaskTrend/>
+            <TaskCount data={tagevents}/>
         </div>
     )
 }

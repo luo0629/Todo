@@ -35,7 +35,6 @@ export const useTodoStore = create<TodoState>((set, get) => ({
     events: {
         old_events:[],
         today_events: [],
-        tomorrow_events: [],
         other_events: []
     },
     tagevents:{
